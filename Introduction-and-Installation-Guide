@@ -1,0 +1,41 @@
+#Terraform (IaC)
+What is Terraform?
+Terraform is an Infrastructure as Code (IaC) tool that lets us build, change, and version infrastructure safely and efficiently. This includes low-level components like compute instances, storage, and networking, and high-level components like DNS entries and SaaS features.  
+Cloud Agnostic: Terraform is not specific to any cloud provider. This means if we master Terraform, we can work with multiple cloud providers without knowing the console information about that specific cloud provider.
+Ownership: It is developed and owned by HashiCorp.
+Support: It supports all cloud providers.
+Licensing: It's free for now but can be paid in the future, while the community version will be free.
+Language: Terraform uses HCL (HashiCorp Configuration Language).
+File Extension: Terraform scripts (files) are saved with the .tf extension.
+
+*Note: We can go to developer.hashicorp.com for more info.
+
+Security & Identity: Security credentials are needed irrespective of the cloud provider to specify our identity.
+Execution Context: Not everyone can write infrastructure, and the code written must be for some account i.e., where the instructions must be executed.
+
+#Installation Guide
+For Windows / macOS
+Just go to developer.hashicorp.com and under install, follow the steps/guide to install the software as specific to the OS.
+
+Installation on the Cloud (Universal Approach)
+On Linux VM (AWS Cloud):
+Create an EC2 instance on AWS (Amazon Linux).
+Get connected on the Terminal using an SSH connection.
+
+Copy the code for installation from developer.hashicorp.com for Amazon Linux:
+->sudo yum install -y yum-utils shadow-utils
+->sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+->sudo yum -y install terraform
+
+#Verification
+We can verify if Terraform is installed by checking:
+->terraform -v
+ OR
+->terraform --version
+
+Example Output:
+Terraform v1.13.4
+on linux_amd64
+
+#Strategy Note:
+We'll be using the Amazon Linux VM method for using Terraform. Downloading VS Code / Terraform locally is an overhead, but we might need VS Code in the future.
