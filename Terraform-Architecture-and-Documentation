@@ -1,0 +1,41 @@
+#Terraform Architecture & Workflow:
+•Terraform uses HCL to code.
+•Terraform scripts must be saved with a .tf extension.
+
+#Core Execution Lifecycle;
+The standard sequence of commands runs as follows:
+Save script to .tf → terraform init → terraform fmt → terraform validate → terraform plan → terraform apply
+
+[ ec2.tf ] ──> [ terraform init ] ──> [ terraform plan ] ──> [ terraform apply ]
+                      │
+                      ├──> ( terraform fmt )
+                      │
+                      └──> ( terraform validate )
+
+               /\
+              /  \
+             /    \
+            <      >  [ terraform destroy ]
+             \    /
+              \  /
+               \/
+#Note: terraform fmt and terraform validate are optional but highly recommended steps.
+
+#Detailed Command Breakdown
+•We have a Terraform script saved with a .tf extension. The lifecycle commands operate as follows:
+•terraform init: To initialize the Terraform script and the working directory.
+•terraform fmt: Formats the Terraform script's indentation and spacing (it will get the script in proper order).
+•terraform validate: Verifies and validates the Terraform script syntax.
+•terraform plan: Creates an execution plan for the script, previewing changes before they hit the cloud.
+•terraform apply: Creates actual resources on the cloud based on the given plan.
+•terraform destroy: It will destroy / delete the resources which got created in the cloud.
+
+#Best Practices & Workspace Setup:
+It is highly recommended to create a dedicated directory/folder for your scripts to keep things isolated:
+
+sudo mkdir 01-tf-script
+cd 01-tf-script
+
+#Terraform Documentation:
+Terraform Registry: Discover Terraform providers that power all of Terraform's resource types, or find modules for quickly deploying common infrastructure configurations.
+Official URL: https://registry.terraform.io/browse/providers
