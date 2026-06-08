@@ -1,0 +1,52 @@
+#Writing and Executing our First Terraform Script:
+
+•Step-by-Step Environment Setup
+•Provision Infrastructure: Create an EC2 VM with basic configurations (or as per your requirement) via the AWS Console.
+•Establish Connection: Connect using an SSH connection on your terminal and follow the sequence below:
+
+~ Install terraform using the command from developer.hashicorp.com
+~ Create a dedicated working directory
+sudo mkdir terraform-01-script
+
+~ Set your active session security credentials
+export AWS_ACCESS_KEY_ID="xyz"
+export AWS_SECRET_ACCESS_KEY="xyz"
+
+~ Navigate into your directory and verify contents
+cd terraform-01-script
+ls -l
+
+~ Create and open your first configuration file in Vim
+vi tf-script-1.tf
+
+#Configuration File Code (tf-script-1.tf)
+
+•Press i to enter Insert Mode in Vim and add the following infrastructure code:
+
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "linux_vm" {
+  ami             = "ami-05d4604467837b4ec"
+  instance_type   = "t2.micro"
+  key_name        = "Ankush-Key-Pair"
+  security_groups = ["default"]
+
+  tags = {
+    Name = "Ankush-Server"
+  }
+}
+
+•Press Esc followed by :wq to save and exit Vim.
+
+#Execution Steps
+We need to run the deployment lifecycle commands in sequence within our workspace:
+
+terraform init
+terraform fmt
+terraform validate
+terraform plan
+terraform apply --auto-approve
+
+*Result: After completion of the above steps, we will notice an EC2 instance named "Ankush-Server" successfully created in your AWS account console.
