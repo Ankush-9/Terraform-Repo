@@ -1,0 +1,28 @@
+#Understanding Terraform State (terraform.tfstate):
+
+•The state file is the "brain" of your Terraform configuration. It maps your code to the real-world resources deployed in your cloud environment.
+
+#Handling Changes and Backups
+
+~If you make a change in your Terraform script (e.g., renaming an instance from Ankush-Server to Ankush-2-Server):
+•State Updates: Terraform compares your new script against the current terraform.tfstate. It detects the drift in the name, updates the state file to match the new configuration, and applies the change to the actual resource.
+•Backup Files: Terraform automatically maintains a backup file named terraform.tfstate.backup. This file holds the previous state of your infrastructure, providing a safety net if the current state file becomes corrupted or if you need to revert to a previous known configuration.
+
+#Key Notes on Terraform State
+
+•Source of Truth: It stores the current state of your infrastructure so Terraform knows exactly what has been created, updated, or destroyed.
+•Comparison Engine: It is used to compare your desired configuration (your .tf files) with the actual deployed resources.
+•Security Warning: The state file can contain sensitive information like passwords, secrets, and access keys in plain text. Always protect your state files and never commit them to public version control systems.
+
+#Managing Credentials in the Provider Block
+
+~If you encounter credential issues while running your scripts, you can explicitly define them within your provider block.
+
+provider "aws" {
+  region      = "ap-south-1"
+  access_key  = "YOUR_ACCESS_KEY"
+  secret_key  = "YOUR_SECRET_KEY"
+}
+
+*Security Note:
+ While this solves immediate credential issues, hardcoding keys directly into your configuration files is a security risk. In production environments, use environment variables, AWS profiles, or IAM roles.
