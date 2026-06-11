@@ -1,6 +1,6 @@
 #Automating EC2 Deployment with User Data:
 
-•Using user_data allows you to automatically bootstrap your instance (e.g., install a web server) the moment the VM is launched, without manual interaction.
+• Using user_data allows you to automatically bootstrap your instance (e.g., install a web server) the moment the VM is launched, without manual interaction.
 1. Setup the Bootstrap Script
 First, create a shell script file on your machine that Terraform will execute during the instance creation.
 
@@ -18,7 +18,7 @@ sudo systemctl start httpd
 
 2. Configure the Terraform Script (tf_script.tf)
 
-•Update your main Terraform configuration to include the user_data argument.
+• Update your main Terraform configuration to include the user_data argument.
 
 provider "aws" {
   region     = "ap-south-1"
@@ -31,8 +31,6 @@ resource "aws_instance" "linux_vm" {
   instance_type   = "t2.micro"
   key_name        = "Ankush-Key-Pair"
   security_groups = ["default"]
-  
-  # Pointing to the script file created above
   user_data       = file("install_httpd.sh")
 
   tags = {
@@ -42,7 +40,7 @@ resource "aws_instance" "linux_vm" {
 
 3. Execution Lifecycle
 
-•Once the files are created, run your standard workflow to provision the infrastructure:
+• Once the files are created, run your standard workflow to provision the infrastructure:
 ›terraform init
 ›terraform fmt
 ›terraform validate
