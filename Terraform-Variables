@@ -1,0 +1,44 @@
+# Variables in Terraform:
+The primary goal of using variables in Terraform is to achieve modularity and code reusability. Instead of hardcoding values directly into your infrastructure configuration, variables allow you to externalize configuration values.
+
+#Types of Variables:
+~Input Variables: Used to supply data or values dynamically into your Terraform configuration scripts. They act like function arguments or inputs.
+·Examples: Mapping instance types, AMI values, or Key Pair names dynamically.
+~Output Variables: Used to extract and print specific pieces of information to the console after a Terraform script successfully executes.
+·Examples: Printing an S3 bucket's regional domain information, or retrieving the Public IP/Private IP addresses of a newly created EC2 instance.
+
+#Implementing Modular Architecture (Step-by-Step Example)
+To modularize our setup,we have split our logic cleanly into dedicated configuration files within our working directory as follows:
+
+1. provider.tf : This file isolates your infrastructure provider definition and authentication setup.
+
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "YOUR_ACCESS_KEY"
+  secret_key = "YOUR_SECRET_KEY"
+}
+
+2. input.tf : This file declares your variable definitions along with descriptions and optional default values.
+
+variable "ami" {
+  description = "Amazon VM image value"
+  default     = "value" # Replace with your copied AMI ID
+}
+
+variable "instance_type" {
+  description = "Instance type value"
+  default     = "t2.micro"
+}
+
+3. main.tf : This file manages your core resource provisioning logic, referencing the variables declared in input.tf using the var.<variable_name> syntax.
+
+resource "aws_instance" "linux_vm" {
+  ami             = var.ami
+  instance_type   = var.instance_type
+  key_name        = "Key-Pair"
+  security_groups = ["default"]
+
+  tags = {
+    Name = "Alien-Server"
+  }
+}
