@@ -1,0 +1,30 @@
+# Output Files in Terraform (output.tf):
+› Output variables act as return values for your Terraform configuration. They allow you to extract public, private, or complex state attributes of your provisioned infrastructure directly to the terminal console once execution finishes.
+› Creating the Output Configuration
+› Create a dedicated file to hold your return statements:
+
+•sudo vi output.tf
+•Contents of output.tf:
+
+# Extract only the Public IP address of the EC2 instance
+
+output "ec2_vm_public_ip" {
+  value = aws_instance.linux_vm.public_ip
+}
+
+# Extract the complete metadata structure of the EC2 resource
+
+output "ec2_vm_full_info" {
+  value = aws_instance.linux_vm
+}
+
+#Terminal Output Behavior
+› After running terraform apply, Terraform prints the requested values directly at the bottom of your execution summary:
+
+#Outputs:
+
+ec2_vm_full_info = {
+  "ami" = "ami-30sd3d91b9f22e84"
+  ...
+}
+ec2_vm_public_ip = "3.111.38.241"
