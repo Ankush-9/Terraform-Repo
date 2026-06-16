@@ -1,0 +1,12 @@
+#Taint and Untaint in Terraform:
+› The state file is critical because it contains the current state of your VM. If a machine has a problem and you want to delete and recreate it, running terraform apply normally will not recreate the machine; it will simply show 0 added, 0 destroyed, 0 changed. Using the taint command allows you to avoid the overhead and risks of manually deleting the state file.
+
+1. The taint Command
+› You can "taint" a resource to mark it as needing recreation during the next terraform apply. It effectively tells Terraform that a resource is "bad" and needs to be redeployed.
+› Usage: terraform taint <resource_type>.<alias_name>
+› Example: terraform taint aws_instance.linux_vm
+› Alias Name: In this case, linux_vm is the name of the alias used in your script.
+
+2. The untaint Command
+› If you change your mind, you can use terraform untaint to remove the taint from a resource. This ensures the resource will stay as it is during the next apply instead of being recreated.
+› Usage: terraform untaint aws_instance.linux_vm
