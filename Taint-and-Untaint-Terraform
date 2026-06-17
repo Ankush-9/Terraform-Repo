@@ -1,12 +1,30 @@
-#Taint and Untaint in Terraform:
-› The state file is critical because it contains the current state of your VM. If a machine has a problem and you want to delete and recreate it, running terraform apply normally will not recreate the machine; it will simply show 0 added, 0 destroyed, 0 changed. Using the taint command allows you to avoid the overhead and risks of manually deleting the state file.
+# Taint Command and State File Management:
+› State file is very important. Because inside state file, the current information about our VM is present. If suppose any machine is having problem and we want to delete it and recreate it back. Then if we hit terraform apply it will not recreate the machine. It will simply show 0 added, 0 destroyed, 0 changed.
+› So instead of deleting state file, because deleting state file can bring lots of overhead and lots of problem.
 
-1. The taint Command
-› You can "taint" a resource to mark it as needing recreation during the next terraform apply. It effectively tells Terraform that a resource is "bad" and needs to be redeployed.
-› Usage: terraform taint <resource_type>.<alias_name>
-› Example: terraform taint aws_instance.linux_vm
-› Alias Name: In this case, linux_vm is the name of the alias used in your script.
+# We use taint command as:
+› terraform taint <resource_type>.<alias_name>
+› Eg -> terraform taint aws_instance.linux_vm
+*(Note: linux_vm is the alias name which we used in our script)
+› By hitting the above command, we are marking that resource as a corrupted/bad resource inside the state file, indicating that it needs to be recreated.
 
-2. The untaint Command
-› If you change your mind, you can use terraform untaint to remove the taint from a resource. This ensures the resource will stay as it is during the next apply instead of being recreated.
-› Usage: terraform untaint aws_instance.linux_vm
+› If we change our mind and do not want to recreate the resource, we can untaint it:
+› terraform untaint aws_instance.linux_vm
+
+# Taint Lifecycle and Practical Observations:
+› Suppose we have a script to create an EC2 VM name -> Server-X.
+› When we hit taint command:
+› aws_instance.linux_vm has been marked as tainted.
+› Next when we execute -> sudo terraform apply --auto-approve (while Server-X is already running).
+› Then first it will destroy the resource, and then it will re-create the resource with the same name Server-X.
+*(Note: We can change the name after taint to get better clarity on AWS web console)
+*During practice, the old machine "Server-New" got deleted and "Server-New-Tainted" got created. (New machine got created).
+
+# Advanced Taint Behaviors and Introduction to Terraform Modules:
+› Again and Again if we have to taint we have to get our resource to tainted state
+› And if we want to get a tainted resource to normal state we use the untaint command as -
+› sudo terraform untaint aws_instance.linux_vm
+
+*Now the thing is to we taint we again and again have to use the taint command to get to tainted state
+› eg. if i changed the name in main.tf and didn't went to tainted mode, I noticed that the source got changed rather than being recreated after deletion.
+› If we try to untaint an untainted resource we get a warning only.
