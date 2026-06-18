@@ -1,0 +1,50 @@
+# Terraform Modules :
+• A terraform module is a set of Terraform configuration files in a single directory.
+• A Single Directory with one or more .tf files can be considered as a module.
+• One root module can have any number of child modules in terraform.
+eg. Inside one project or module we can have / create multiple child modules ec2, S3, vpc, ...
+
+Note :
+› We'll be running terraform commands from root module and root module will invoke child modules for execution
+
+› We had created a directory ( 01-tf-script ) and within it we had various modules like input.tf , provider.tf , output.tf or main.tf .
+› We call it ( 01-tf-script ) as one module .
+› What if we have to create multiple resources ?
+eg. S3, RDS, IAM, EC2, VPC, ...
+
+› If we write everything in main we'll have various input variables
+--> It will be difficult to maintain
+--> Though it is a valid approach it's hectic as well.
+
+› We can make use of Terraform Modules here .
+--> In Terraform modules we have one root directory , we specify provider.tf , main.tf , output.tf ( to get output from child modules )
+--> We create another directory named modules within which we specify what all resources ( as modules ) we want . We can create n no. of directories here , within which we can define input.tf , main.tf and our output.tf while the provider.tf is at root level.
+
+* tree -
+sudo yum install tree -y
+    - It can be used to understand file structure in a diagramatic representation .
+        eg. tree 01-tf-script
+
+› It's not necessary to use input and output variables , not compulsary for small scripts .
+› At root level we write main.tf file from where we invoke the other output files or child main.tf files .
+› We have output.tf at root level to invoke child output.tf files .
+› * All the terraform execution will be performed at the root level with better maintainance .
+› The modules within root module are called as child modules .
+
+› eg.         05 - tf - script                    (--> root module)
+             |
+             |---- provider.tf
+             |---- main.tf
+             |---- output.tf
+             |
+             |____ modules                      (--> child)
+                   |
+                   |____ ec2                    (--> child)
+                   |     |---- main.tf
+                   |     |---- input.tf
+                   |     |---- output.tf
+                   |
+                   |____ S3                     (--> child)
+                         |---- main.tf
+                         |---- input.tf
+                         |---- output.tf
