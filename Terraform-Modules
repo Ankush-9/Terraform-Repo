@@ -48,3 +48,128 @@ sudo yum install tree -y
                          |---- main.tf
                          |---- input.tf
                          |---- output.tf
+
+# Practical -
+› Connect to an EC2 VM via SSH connection on terminal and install terraform using command from Terraform website
+› Also install tree -
+sudo yum install tree -y
+
+#Follow the below commands -
+› sudo mkdir OS- tf-script
+› cd OS- tf-script
+› sudo touch main.tf ~~input.tf~~ output.tf (Note: input.tf is crossed out in the notes)
+› sudo mkdir modules
+› sudo touch provider.tf
+› cd modules
+› sudo mkdir ec2
+› sudo mkdir S3
+› cd ec2
+› sudo touch main.tf input.tf output.tf
+› cd ..
+› cd S3
+› sudo touch main.tf
+› cd ..
+› cd ..
+› cd ..
+› Now we are in home directory
+› hit command ~ tree OS- tf-script
+
+OS- tf-script
+├── modules
+│   ├── ec2
+│   │   ├── main.tf
+│   │   ├── input.tf
+│   │   └── output.tf
+│   └── S3
+│       └── main.tf
+├── main.tf
+├── output.tf
+├── provider.tf
+├── terraform.tfstate
+└── terraform.tfstate.backup
+3 directories , 9 files
+
+#Data within each file is as -
+› cd OS- tf-script
+› cat main.tf
+
+module "my_ec2" {
+    source = "./modules/ec2"
+    instance_type = "t2.micro"
+}
+module "s3_bucket" {
+    source = "./modules/S3"
+}
+
+› cat output.tf
+
+output "ec2_vm_public_ip" {
+    value = module.my_ec2.ec2_vm_public_ip
+}
+ 
+› cat provider.tf
+
+provider "aws" {
+    access_key = "..."
+    secret_key = "..."
+    region = "ap-south-1"
+}
+
+› cd modules
+› cd ec2
+› cat main.tf
+
+resource "aws_instance" "linux_vm" {
+    ami = var.ami
+    ~~instance_type = "t2.micro"~~ *(Note: crossed out in notes)*
+    instance_type = var.instance_type
+    key_name = "Ankush-Key-Pair"
+    security_groups = ["default"]
+    tags = {
+        Name = "Server-X"
+    }
+}
+
+› cat input.tf
+
+variable "instance_type" {
+    type = string
+    description = "Value for Instance type".
+}
+variable "ami" {
+    description = "Value for ami id"
+    default = "ami-..."
+}
+
+› cat output.tf
+
+output "ec2_vm_public_ip" {
+    value = aws_instance.linux_vm.public_ip
+}
+
+› cd ..
+› cd S3
+› cat main.tf
+
+resource "aws_s3_bucket" "my_bucket" {
+    bucket = "ankush009sample"
+    versioning {
+        enabled = true
+    }
+    tags = {
+        Name = "ankush009sample"
+    }
+}
+
+› cd ..
+› cd ..
+› sudo terraform init
+› sudo terraform fmt
+› sudo terraform validate
+› sudo terraform plan
+› sudo terraform apply --auto-approve
+
+*Now if we check our web console we'll see Server-X created as an EC2 VM and, ankush009sample created as an S3 bucket
+
+› sudo terraform destroy --auto-approve
+› To avoid unnecessary bills
