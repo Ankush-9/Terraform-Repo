@@ -1,0 +1,32 @@
+-> Lock file in terraform -
+~ The .terraform.lock.hcl is a file which is created or updated when we run terraform init command , it contains specific info about the providers used in our configuration. It's a dependency lock file, that ensures consistent deployments.
+~ This lock file will be generated based on the information of the provider (which cloud platform we are using)
+~ The lock file is generated as soon as we hit the terraform init and this file has the provider information.
+~ log and lock is different
+
+*Logs are used to maintain the health of our application (used for debugging purposes).
+*The lock file is basically to ensure provider consistency.
+
+-> Environments of the Project -
+› It refers to the platform that is required to run our app (servers, database, storage, network, tools, softwares, ....)
+› One project may contain multiple environments such as -
+-> Dev - env (used by developer team)
+-> QA ( SIT - System in test) - env (used by testers)
+-> UAT - env (User Accepting testing) is used by client of our app.
+-> Pilot - env (Pre-Production environment) is used before the deployment of the application
+-> PROD - env (Production environment) refers to the live environment where our application is live to the world.
+
+*Basically all the dependencies required to make an application work make up the environment.
+
+~ Every time we develop an application , we have two major steps -
+1) developers write the code (task over)
+2) we have to build and deploy that app (DevOps and cloud team comes into picture)
+
+*But, before deployment we have to test many things - We'll have to package and deploy our application into multiple environments which are discussed above.
+
+eg. for a development team , they have coded and in their machine they'll have their own setups (ides, softwares, DBs and so on) which is known as a dev environment (setup)
+› Testing and other teams must have similar setup with varying configurations (that make environments distinct) to make that application work.
+› An app goes through various environments
+› Now Workspaces come into picture.
+
+*Out of 5 terraform commands the init and apply are most important.
