@@ -1,0 +1,22 @@
+-> Terraform Workspace -
+It allows us to manage multiple distinct environments (like development, staging , and production) with the same Terraform configuration code.
+This prevents us from needing to duplicate our entire codebase for each environment.
+To manage the infrastructure in multiple environments we have the concept of Workspaces.
+
+-> Terraform Workspace -
+(Dev) -> | t2.medium | <- [ dev.tfvars ]
+(QA(SIT)) -> | large | <- [ qa.tfvars ]
+(UAT) -> | large | <- [ uat.tfvars ]
+(PROD) -> | t2.xlarge | <- [ prod.tfvars ]
+
+› terraform apply --var-file=dev.tfvars
+
+*Suppose we want different configurations for different environments
+*Now we'll use Terraform workspaces to manage our infrastructure for different environments.
+*So, basically as stated in diagram , we'll be creating different files where we'll specify the changes we want -> based on that we will make the decisions
+
+For eg in diag -
+DEV  ~  dev.tfvars
+QA   ~  qa.tfvars
+UAT  ~  uat.tfvars
+PROD ~  prod.tfvars
