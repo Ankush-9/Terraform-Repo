@@ -20,3 +20,20 @@ DEV  ~  dev.tfvars
 QA   ~  qa.tfvars
 UAT  ~  uat.tfvars
 PROD ~  prod.tfvars
+
+-> Terraform workspace commands ~
+...> terraform workspace show      - diplays the current workspace in use
+eg default
+
+...> sudo terraform workspace new       - Creates a new workspace with the specified name and switches to that .
+eg sudo terraform workspace new dev .
+
+...> sudo terraform workspace list      ~ Gives the list of all created and available workspaces, while denoting the current one with '*'
+eg   default
+   * prod
+     dev
+
+...> sudo terraform workspace select < name >     - This command is used to switch to a workspace .
+eg sudo terraform workspace select dev .
+
+~ Workspaces are most powerful when combined with variables. We can use a single configuration and change resource attributes ( like instance size or database name ) by using different variable values for each workspace .
