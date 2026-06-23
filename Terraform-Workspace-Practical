@@ -1,0 +1,112 @@
+-> Practical :
+Connect to a VM via ssh connection on mac terminal , install terraform for Amazon Linux .
+
+sudo mkdir 01-tf-script
+cd 01-tf-script
+sudo touch main.tf dev.tfvars prod.tfvars provider.tf qa.tfvars variables.tf
+
+› Configure these files as
+
+sudo vi provider.tf
+i
+provider "aws" {
+region     = "ap-south-1"
+access_key = " "
+secret_key = " "
+}
+esc      +       : wq
+
+sudo vi main.tf
+i
+resource "aws_instance" "my_vm" {
+ami           = var.ami_id
+instance_type = var.instance_type
+tags = {
+Name = "Server-${terraform.workspace}"
+}
+}
+esc      +       : wq
+sudo vi dev.tfvars
+i
+ami_id        = "ami-00bb6a80f01f03502"
+instance_type = "t2.micro"
+esc      +       : wq
+
+sudo vi prod.tfvars
+i
+ami_id        = "ami-00bb6a80f01f03502"
+instance_type = "t2.medium"
+esc      +       : wq
+sudo vi qa.tfvars
+i
+ami_id        = "ami-00bb6a80f01f03502"
+instance_type = "t2.small"
+esc      +       : wq
+
+sudo vi variables.tf
+i
+variable "ami_id" {
+type  =  string
+}
+variable "instance_type" {
+type  =  string
+}
+esc      +       : wq
+
+sudo terraform init
+sudo terraform fmt
+sudo terraform validate
+sudo terraform workspace list
+default
+
+sudo terraform workspace new dev
+Created and switched to workspace "dev"!
+
+*You're now on a new, empty workspace. Workspaces isolate their state,so if you run "terraform plan" Terraform will not see any existing resources in this configuration.
+
+sudo terraform workspace list
+default
+dev
+
+sudo terraform plan --var-file=dev.tfvars
+sudo terraform apply --var-file=dev.tfvars --auto-approve
+Now check AWS console , dev server will be created (Server-dev)
+sudo terraform workspace new prod
+Created and switched to workspace "prod"!
+sudo terraform workspace list
+default
+dev
+prod
+sudo terraform plan --var-file=prod.tfvars
+sudo terraform apply --var-file=prod.tfvars --auto-approve
+
+› Now check AWS console , prod server will be created (Server-prod)
+sudo terraform workspace new qa
+Created and switched to workspace "qa"!
+
+› sudo terraform workspace list
+default
+dev
+prod
+qa
+sudo terraform plan --var-file=qa.tfvars
+sudo terraform apply --var-file=qa.tfvars --auto-approve
+
+› Now check AWS console , qa server will be created (Server-qa)
+› Now total 3 instances are running on console .
+
+› To check where workspaces are created inside our local machine folder hit command ~
+ls -a
+cd .terraform.tfstate.d
+ls
+dev   prod   qa
+cd dev
+ls
+terraform.tfstate
+
+› Now to destroy the environments -
+sudo terraform destroy --var-file=qa.tfvars --auto-approve
+sudo terraform workspace select prod
+sudo terraform destroy --var-file=prod.tfvars --auto-approve
+sudo terraform workspace select dev
+sudo terraform destroy --var-file=dev.tfvars --auto-approve
